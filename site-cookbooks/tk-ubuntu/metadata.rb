@@ -1,0 +1,8 @@
+name             'tk-ubuntu'
+license          'All rights reserved'
+description      'Installs/Configures ubuntu'
+version          '0.1.0'
+depends          'user'
+depends          'apt'
+depends          'build-essential'
+depends          'sudo'

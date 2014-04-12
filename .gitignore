@@ -1,3 +1,4 @@
 /cookbooks/
 /bin
 .bundle
+/nodes/
