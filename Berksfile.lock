@@ -15,6 +15,9 @@
     "sudo": {
       "locked_version": "2.2.2"
     },
+    "docker": {
+      "locked_version": "0.31.0"
+    },
     "dmg": {
       "locked_version": "1.1.0"
     },
@@ -29,6 +32,27 @@
     },
     "runit": {
       "locked_version": "1.4.0"
+    },
+    "golang": {
+      "locked_version": "1.1.1"
+    },
+    "homebrew": {
+      "locked_version": "1.5.4"
+    },
+    "lxc": {
+      "locked_version": "1.1.8"
+    },
+    "dpkg_autostart": {
+      "locked_version": "0.1.10"
+    },
+    "modules": {
+      "locked_version": "0.1.2"
+    },
+    "sysctl": {
+      "locked_version": "0.3.5"
+    },
+    "yum-epel": {
+      "locked_version": "0.3.2"
     }
   }
 }
