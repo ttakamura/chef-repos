@@ -1,4 +1,9 @@
-mount "/mnt" do
+execute 'mkfs ephemeral disk' do
+  command "mkfs -t ext4 /dev/xvdb"
+  not_if  "grep -qs /var/tmp /proc/mounts"
+end
+
+mount "/var/tmp" do
   device   "/dev/xvdb"
   fstype   "ext4"
   options  "defaults,nobootwait"

@@ -21,6 +21,9 @@
     "aufs": {
       "locked_version": "0.1.1"
     },
+    "lxc": {
+      "locked_version": "1.1.8"
+    },
     "dmg": {
       "locked_version": "1.1.0"
     },
@@ -42,12 +45,6 @@
     "homebrew": {
       "locked_version": "1.5.4"
     },
-    "lxc": {
-      "locked_version": "1.1.8"
-    },
-    "dpkg_autostart": {
-      "locked_version": "0.1.10"
-    },
     "modules": {
       "locked_version": "0.1.2"
     },
@@ -56,6 +53,9 @@
     },
     "yum-epel": {
       "locked_version": "0.3.2"
+    },
+    "dpkg_autostart": {
+      "locked_version": "0.1.10"
     }
   }
 }
