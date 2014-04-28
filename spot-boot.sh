@@ -33,9 +33,24 @@ cat << EOF >> /tmp/launch_config.json
   ],
   "IamInstanceProfile": {
     "Arn":"${IAM_ROLE}"
-  }
+  },
+  "BlockDeviceMappings": [
+    {
+      "DeviceName": "/dev/sda1",
+      "Ebs": {
+        "VolumeSize": 10,
+        "DeleteOnTermination": false,
+        "VolumeType": "standard"
+      }
+    }
+  ]
 }
 EOF
+
+#
+# "Ebs":
+#   "SnapshotId": "string",
+#
 
 ### PUT SPOT_REQUEST
 aws --profile ${PROFILE} ec2 request-spot-instances --spot-price ${PRICE} --region ${REGION} --availability-zone-group ${AV_ZONE} --type ${TYPE} --launch-specification file:///tmp/launch_config.json > /tmp/spot_request.json
