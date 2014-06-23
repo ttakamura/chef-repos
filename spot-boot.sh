@@ -40,7 +40,7 @@ cat << EOF >> /tmp/launch_config.json
       "Ebs": {
         "VolumeSize": 10,
         "DeleteOnTermination": false,
-        "VolumeType": "standard"
+        "VolumeType": "gp2"
       }
     }
   ]
@@ -57,7 +57,7 @@ aws --profile ${PROFILE} ec2 request-spot-instances --spot-price ${PRICE} --regi
 SIR_ID=`jq '.SpotInstanceRequests[0] | .SpotInstanceRequestId' /tmp/spot_request.json --raw-output`
 
 echo "[INFO] SpotInstanceRequestID: ${SIR_ID}";
-
+sleep 3
 
 ### GET SPOT_INSTANCE INSTANCE_ID
 rm -f /tmp/spot_instance.json

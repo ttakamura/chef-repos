@@ -9,6 +9,18 @@ EOT
   creates '/home/dokku/VHOST'
 end
 
+node['dokku']['plugins'].each do |name, repos|
+  bash "Install dokku plugins #{name}" do
+    code <<-EOT
+cd /var/lib/dokku/plugins
+git clone #{repos} #{name}
+dokku plugins-install
+EOT
+    not_if "file /var/lib/dokku/plugins/#{name}"
+  end
+end
+
+
 cookbook_file '/tmp/dokku_id_rsa.pub' do
   source 'dokku_id_rsa.pub'
 end
