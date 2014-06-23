@@ -1,3 +1,4 @@
+
 if node[:tk][:ebs]
   node[:tk][:ebs].each do |dir, settings|
     device, vol_id = settings
