@@ -1,13 +1,25 @@
 require 'json'
 require 'slop'
 
+def userdata_script
+  <<-EOT
+#!/bin/sh
+service docker stop
+umount /dev/xvdb
+mkdir /var/tmp
+mount -t ext4 /dev/xvdb /var/tmp
+mount -t ext4 /dev/xvdf /mnt
+service docker start
+EOT
+end
+
 PROFILE         = "home"
 AMI             = "ami-fbebbefa" # dokku-20140630
                   # ami-bfdaa2be # ubuntu/images/hvm/ubuntu-precise-12.04-amd64-server-20140428
 IAM_ROLE        = "arn:aws:iam::302521238288:instance-profile/dokku"
 TYPE            = "one-time"     # one-time or persistent
 KEYPAIR         = "tatsuya"
-USER_DATA       = `echo "" | openssl enc -base64`
+USER_DATA       = `echo "#{userdata_script}" | openssl enc -base64`
 REGION          = "ap-northeast-1"
 SECURITY_GROUPS = "sg-eba2418e"
 SUBNET_ID       = "subnet-4972280f"
@@ -37,10 +49,6 @@ def make_spot_req instance_type, price, av_zone
                               {
                                 "DeviceName"  => "/dev/sdb",
                                 "VirtualName" => "ephemeral0"
-                              },
-                              {
-                                "DeviceName"  => "/dev/sdc",
-                                "VirtualName" => "ephemeral1"
                               }
                              ]
   }
@@ -98,6 +106,7 @@ if @opts[:spot_req]
 else
   spot_req = make_spot_req @opts[:instance_type], @opts[:price], @opts[:zone]
   @spot_req_id = spot_req['SpotInstanceRequestId']
+  sleep 5
 end
 
 begin
@@ -108,7 +117,12 @@ end while spot_req['Status']['Code'] != 'fulfilled'
 
 instance_id = spot_req['InstanceId']
 puts instance_id
-instance    = describe_instance instance_id
+
+begin
+  instance = describe_instance instance_id
+  puts "instance ##{instance_id} - #{instance['State']['Name']}"
+  sleep 5
+end while instance['State']['Name'] != 'running'
 
 unless instance['BlockDeviceMappings'].find{|v| v['DeviceName'] == '/dev/sdf' }
   ebs_req = attach_ebs instance_id, MNT_EBS_VOL, '/dev/sdf'
