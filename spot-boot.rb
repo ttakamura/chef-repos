@@ -14,7 +14,9 @@ EOT
 end
 
 PROFILE         = "home"
-AMI             = "ami-fbebbefa" # dokku-20140630
+AMI             = "ami-fbebbefa" # dokku-20140630 
+                  # "ami-4d3b734c"  # GPGPU
+                  # "ami-fbebbefa" # dokku-20140630
                   # ami-bfdaa2be # ubuntu/images/hvm/ubuntu-precise-12.04-amd64-server-20140428
 IAM_ROLE        = "arn:aws:iam::302521238288:instance-profile/dokku"
 TYPE            = "one-time"     # one-time or persistent

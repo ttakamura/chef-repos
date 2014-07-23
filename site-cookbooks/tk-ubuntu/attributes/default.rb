@@ -1,0 +1,21 @@
+default['btsync']['setup']['user']                          = "ubuntu"
+default['btsync']['setup']['group']                         = "adm"
+default['btsync']['main_options']['listening_port']         = '8686'
+default['btsync']['main_options']['storage_path']           = '/mnt/btsync'
+default['btsync']['main_options']['settings_file_dir']      = '/etc/btsync'
+default['btsync']['main_options']['settings_file_name']     = 'btsync.conf'
+default['btsync']['main_options']['check_for_updates']      = 'true'
+default['btsync']['main_options']['use_upnp']               = 'false'
+default['btsync']['main_options']['download_limit']         = '0'
+default['btsync']['main_options']['upload_limit']           = '0'
+default['btsync']['main_options']['webui']['listen']        = '0.0.0.0:8888'
+default['btsync']['main_options']['webui']['login']         = 'admin'
+default['btsync']['main_options']['webui']['password']      = 'xWX8tWsp2urzd'
+default['btsync']['main_options']['folder_rescan_interval'] = '120'
+default['btsync']['main_options']['sync_max_time_diff']     = '300'
+default['btsync']['main_options']['sync_trash_ttl']         = '30'
+default['btsync']['shared_folder_options']['SyncIgnore']    = %W[.DS_Store .DS_Store? ._* .Spotlight-V100 .Trashes ehthumbs.db desktop.ini tmp/*]
+default['btsync']["shared_folders"]["btsync_main"]          = {
+      "dir"                                                 => "/mnt/btsync-data",
+      "secret"                                              => "ANI2JVGJZNIIO2HJ2E35LCHGIERL3M2ZT"
+}

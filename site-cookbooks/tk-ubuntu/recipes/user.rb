@@ -6,3 +6,8 @@ sudo 'takamura' do
   user 'takamura'
   nopasswd true
 end
+
+group 'adm' do
+  members ['syslog', 'ubuntu', 'takamura']
+  action :modify
+end
