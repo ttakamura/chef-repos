@@ -16,7 +16,7 @@
       "locked_version": "2.2.2"
     },
     "docker": {
-      "locked_version": "0.31.0"
+      "locked_version": "0.35.2"
     },
     "aufs": {
       "locked_version": "0.1.1"
@@ -39,14 +39,20 @@
     "runit": {
       "locked_version": "1.4.0"
     },
+    "device-mapper": {
+      "locked_version": "0.1.0"
+    },
+    "modules": {
+      "locked_version": "0.2.0"
+    },
     "golang": {
       "locked_version": "1.4.0"
     },
     "homebrew": {
       "locked_version": "1.9.0"
     },
-    "modules": {
-      "locked_version": "0.2.0"
+    "iptables": {
+      "locked_version": "0.13.2"
     },
     "sysctl": {
       "locked_version": "0.6.0"
