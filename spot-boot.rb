@@ -14,10 +14,9 @@ EOT
 end
 
 PROFILE         = "home"
-AMI             = "ami-fbebbefa" # dokku-20140630 
+AMI             = "ami-fbebbefa"    # dokku-20140630
                   # "ami-4d3b734c"  # GPGPU
-                  # "ami-fbebbefa" # dokku-20140630
-                  # ami-bfdaa2be # ubuntu/images/hvm/ubuntu-precise-12.04-amd64-server-20140428
+                  # ami-bfdaa2be    # ubuntu/images/hvm/ubuntu-precise-12.04-amd64-server-20140428
 IAM_ROLE        = "arn:aws:iam::302521238288:instance-profile/dokku"
 TYPE            = "one-time"     # one-time or persistent
 KEYPAIR         = "tatsuya"
@@ -26,7 +25,7 @@ REGION          = "ap-northeast-1"
 SECURITY_GROUPS = "sg-eba2418e"
 SUBNET_ID       = "subnet-4972280f"
 EBS_OPTIMIZE    = false
-MNT_EBS_VOL     = "vol-a7a17da1"
+MNT_EBS_VOL     = {'/dev/sdf' => "vol-c3d29cdd"}
 
 def make_spot_req instance_type, price, av_zone
   json = {
@@ -62,7 +61,7 @@ def make_spot_req instance_type, price, av_zone
     file.write json.to_json
   end
 
-  spot_req = `aws --profile #{PROFILE} ec2 request-spot-instances --spot-price #{price} --region #{REGION} --availability-zone-group #{av_zone} --type #{TYPE} --launch-specification file:///tmp/launch_config.json`
+  spot_req = send_cmd("aws --profile #{PROFILE} ec2 request-spot-instances --spot-price #{price} --region #{REGION} --availability-zone-group #{av_zone} --type #{TYPE} --launch-specification file:///tmp/launch_config.json")
   JSON.parse(spot_req)['SpotInstanceRequests'].first
 end
 
@@ -75,7 +74,8 @@ def fetch_spot_req id
 end
 
 def attach_ebs instance, vol_id, device
-  attach_req = `aws --profile #{PROFILE} ec2 attach-volume --volume-id #{vol_id} --instance-id #{instance} --device #{device}`
+  attach_req = send_cmd("aws --profile #{PROFILE} ec2 attach-volume --volume-id #{vol_id} --instance-id #{instance} --device #{device}")
+  puts attach_req
   JSON.parse attach_req
 end
 
@@ -85,8 +85,13 @@ def describe_instance instance_id
 end
 
 def associate_ip instance_id, allocation_id
-  ip_res = `aws --profile #{PROFILE} ec2 associate-address --instance-id #{instance_id} --allocation-id #{allocation_id}`
+  ip_res = send_cmd("aws --profile #{PROFILE} ec2 associate-address --instance-id #{instance_id} --allocation-id #{allocation_id}")
   JSON.parse ip_res
+end
+
+def send_cmd cmd
+  puts cmd
+  `#{cmd}`
 end
 
 # ------------------------------------------------------------------------------------------------------
@@ -102,6 +107,8 @@ end
   on 's', 'spot_req=',      'Spot-request Id, already submitted'
   on 'n', 'ip=',            'Associate the EIP of association_id'
 end
+
+puts "Sending a Spot instance request....."
 
 if @opts[:spot_req]
   @spot_req_id = @opts[:spot_req]
@@ -126,10 +133,14 @@ begin
   sleep 5
 end while instance['State']['Name'] != 'running'
 
-unless instance['BlockDeviceMappings'].find{|v| v['DeviceName'] == '/dev/sdf' }
-  ebs_req = attach_ebs instance_id, MNT_EBS_VOL, '/dev/sdf'
+MNT_EBS_VOL.each do |device_name, vol_id|
+  puts "Attach a EBS vol '#{vol_id}' on #{device_name}"
+
+  ebs_req = attach_ebs instance_id, vol_id, device_name
   p ebs_req
 end
+
+puts "Associate a EIP....."
 
 if @opts[:ip]
   ip_req = associate_ip instance_id, @opts[:ip]
