@@ -115,7 +115,7 @@ if @opts[:spot_req]
 else
   spot_req = make_spot_req @opts[:instance_type], @opts[:price], @opts[:zone]
   @spot_req_id = spot_req['SpotInstanceRequestId']
-  sleep 5
+  sleep 20
 end
 
 begin
