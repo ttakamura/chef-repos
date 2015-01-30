@@ -1,0 +1,17 @@
+{
+    "dokku":{
+        "vhost":"dk.tkmr.in"
+    },
+    "tk":{
+        "ebs":{
+            "/mnt": ["/dev/sdf", "vol-c3d29cdd"]
+        }
+    },
+    "run_list":[
+        "tk-ubuntu",
+        "tk-ubuntu::dropbox",
+        "tk-docker::disk",
+        "tk-docker",
+        "tk-docker::dokku"
+    ]
+}
